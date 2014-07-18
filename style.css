@@ -1,0 +1,89 @@
+html {
+    overflow-y: scroll;
+}
+html, body {
+    margin: 0;
+}
+a {
+    color: #00E;
+}
+.popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #fff;
+    background: rgba(255,255,255,0.92);
+    text-align: center;
+}
+.popup table {
+    background: #fff;
+}
+.container {
+    position: relative;
+    width: 800px;
+    margin: 0 auto;
+}
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.actions {
+    padding: 20px;
+    width: 750px;
+    margin: 10px auto;
+    background: #fff;
+    background: rgba(255,255,255,0.92);
+    border: 5px solid #ddd;
+    border-color: rgba(0,0,0,0.15);
+}
+h1 {
+    margin-top: 0;
+}
+input[type=button], input[type=submit] {
+    cursor: pointer;
+}
+.games {
+    position: absolute;
+    top: 295px;
+    left: 0;
+    width: 100%;
+    min-width: 800px;
+    padding: 10px 0;
+    text-align: center;
+}
+.board, .board b, .key span, .popup table {
+    display: inline-block;
+    *display:inline;zoom:1;
+}
+.board {
+    width: 60px;
+    height: 45px;
+    overflow: hidden;
+    margin: 2px;
+    font-family:sans-serif;
+}
+.board b {
+    width: 20px;
+    height: 15px;
+    border-color: #000;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    margin: 0 -1px -1px 0;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: #333;
+}
+.board i {
+    font-size: 8px;
+}
+.status {
+    text-align: center;
+}
+.key span {
+    padding: 0 5px;
+}
