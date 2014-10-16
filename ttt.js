@@ -59,7 +59,7 @@ function genGames(max) {
         $('.games .boards').html("");
         Games.showing = 0;
         $('.actions .loading').hide();
-        $('.message').show().html("<p>Took "+(date/1000)+" seconds to generate "+Games.Data.length+" completed games.</p>");
+        $('.message').show().html("<p>Took "+(date/1000)+" seconds to generate "+Games.Data.length+" unique games.</p>");
         printGames();
     }, 100);
 }
