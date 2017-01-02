@@ -1,0 +1,125 @@
+<?php
+
+/* wget <THIS FILE>
+ * mv <THIS FILE> tictactoe.php
+ * #sudo apt-get install php5-cli
+ * php tictactoe.php
+ */
+
+class Wins {
+	static public $wins = array(array(0,3,6), array(1,4,7), array(2,5,8), array(0,1,2), array(3,4,5), array(6,7,8), array(0,4,8), array(2,4,6));
+}
+class tttGame {
+	public $moves = array(0,0,0,0,0,0,0,0,0); // X = odd moves, O = even moves
+	public $winner = 0; // 0 = in progress, 1 = X wins, 2 = O wins, 3 = draw
+	public $moveCount = 0; // Min moves = 5, Max moves = 9
+	public $winId = false;
+	public function checkSideWon($side) {
+		foreach (Wins::$wins as $win) {
+			$won = true;
+			foreach ($win as $move) if (2 - $this->moves[$move]%2 != $side || $this->moves[$move] === 0) $won = false;
+			if ($won) {
+				$this->winId = $win;
+				return true;
+			}
+		}
+		return false;
+	}
+	public function checkWinner() {
+		$this->winner = 0;
+		if ($this->checkSideWon(1) !== false) $this->winner = 1;
+		elseif ($this->checkSideWon(2) !== false) $this->winner = 2;
+		elseif ($this->moveCount == 9) $this->winner = 3;
+		return $this->winner;
+	}
+}
+function genGames($max = 500) {
+	$date = microtime(true);
+	printf("Loading $max games...\n");
+	$games = array();
+	$maintemp = new tttGame();
+	$mainTemp = genMoves($maintemp, $maintemp->moveCount + 1);
+	for ($moveNum = $mainTemp[0]->moveCount + 1; $moveNum <= 9; $moveNum++) {
+		$moreTemps = array();
+		for ($g = 0; isset($mainTemp[$g]); $g++) {
+			$tempGames = genMoves($mainTemp[$g], $moveNum);
+			for ($i = 0; isset($tempGames[$i]); $i++) {
+				if ($tempGames[$i]->checkWinner() !== 0) {
+					$games[] = $tempGames[$i];
+					array_splice($tempGames, $i, 1);
+					$i--;
+				}
+				if (count($games) >= $max) break;
+			}
+			if (count($games) >= $max) break;
+			$moreTemps = array_merge($moreTemps, $tempGames);
+		}
+		if (count($games) >= $max) break;
+		$mainTemp = $moreTemps;
+	}
+	$date = microtime(true) - $date;
+	printf("Took %f seconds to generate %d completed games.\n\n", $date, count($games));
+	return $games;
+}
+function genMoves($game, $moveNum) {
+	$games = array();
+	for ($i = 0; $i < 9; $i++) {
+		if ($game->moves[$i] === 0) {
+			$temp = clone $game;
+			$temp->moves[$i] = $moveNum;
+			$temp->moveCount++;
+			$games[] = $temp;
+		}
+	}
+	return $games;
+}
+function printGames($games, $start = 0, $max = 10) {
+	if ($start > count($games)) $start = count($games) - $max;
+	if ($start < 0) $start = 0;
+	if ($max > count($games)) $max = count($games);
+	for ($i = $start; isset($games[$i]) && $i < $max; $i++) {
+		printBoard($games[$i]);
+		if ($i < count($games)) printf("\n");
+	}
+}
+function printBoard($game) {
+	$result = "";
+	for ($i = 0; $i < 9; $i++) {
+		$result .= $game->moves[$i] > 0 ? ($game->moves[$i] % 2 != 0 ? "X" : "O") : " ";
+		$result .= $game->moves[$i] . " ";
+		if ($i % 3 == 2) $result .= "\n";
+	}
+	printf($result);
+}
+function runCommandLine() {
+	$printInterval = 5;
+	while(true) {
+		printf("How many games? ");
+		fscanf(STDIN, "%d", $num);
+		if ($num > 0) {
+			$games = genGames($num);
+			printGames($games, 0, $printInterval);
+			$count = $printInterval;
+			if ($count > count($games)) $count = count($games);
+			printf("Showing %d of %d games.\n", $count, count($games));
+			while ($count < count($games)) {
+				printf("Print more? ");
+				fscanf(STDIN, "%s", $response);
+				while (!in_array($response, array("y", "n"))) {
+					printf("y or n: ");
+					fscanf(STDIN, "%s", $response);
+				}
+				if ($response == "y") {
+					printGames($games, $count, $count+$printInterval);
+					$count += $printInterval;
+					if ($count > count($games)) $count = count($games);
+					printf("Showing %d of %d games.\n", $count, count($games));
+				} else break;
+			}
+		} else break;
+	}
+}
+
+runCommandLine();
+
+?>
