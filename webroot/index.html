@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
 <head>
 	<meta name="author" content="jason chavannes <jason.chavannes@gmail.com>" />
-	<meta name="license" content="<?php echo WEBROOT; ?>license.txt" />
 	<title>Tic Tac Toe Test</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script type="text/javascript">
         var Browser = {
-            agent: '<?php echo $_SERVER['HTTP_USER_AGENT']; ?>',
+            agent: 'set agent',
             name: $.browser.chrome?"chrome" : $.browser.safari?"safari" : $.browser.mozilla?"mozilla" : $.browser.msie?"msie" : "unknown",
             version: $.browser.version,
             platform: navigator.platform

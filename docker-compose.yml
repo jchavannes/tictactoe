@@ -1,0 +1,21 @@
+services:
+  http-prod:
+    image: tictactoe-http-prod
+    platform: linux/amd64
+    build:
+      dockerfile: http/Dockerfile
+      target: ${DOCKER_TARGET:-production}
+    profiles:
+      - prod
+  http-dev:
+    image: tictactoe-http-dev
+    container_name: tictactoe-http-dev
+    ports:
+      - "8240:80"
+    volumes:
+      - ./webroot/:/var/www/html/
+    build:
+      dockerfile: http/Dockerfile
+      target: ${DOCKER_TARGET:-development}
+    profiles:
+      - dev
